@@ -4,7 +4,7 @@ class Category(models.Model):
 	name = models.CharField(max_length=128, unique=True)
 
 	def __str__(self):
-		return return self.name
+		return self.name
 
 class Page(models.Model):
 	category = models.ForeignKey(Category)
@@ -14,4 +14,3 @@ class Page(models.Model):
 
 	def __str__(self):
 		return self.title
-		
