@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from rango.models import Category
+from rango.models import Category, Page
 
 def index(request):
 	category_list = Category.objects.order_by('-likes')[:5]
@@ -9,3 +9,26 @@ def index(request):
 
 def about(request):
 	return render(request, 'rango/about.html')
+
+def category(request, category_name_slug):
+	context_dict = {}
+
+	try:
+		category = Category.objects.get(slug=category_name_slug)
+		context_dict['category_name'] = category.name
+
+		# Retrieve all of the associated pages
+		pages = Page.objects.filter(category=category)
+
+		context_dict['pages'] = pages
+
+		# Also add category object to the context dictionary
+		# We can use this in the template to verify that the
+		# category exists
+		context_dict['category'] = category
+	except Category.DoesNotExist:
+		# Template automatically displays "no category message for us"
+		pass
+
+	# Render response and return it to the client
+	return render(request, 'rango/category.html', context_dict)

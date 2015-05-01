@@ -8,8 +8,18 @@
 	</head>
 
 	<body>
-		<h1>The Boosh says...</h1>
-		hello world! <strong>{{ boldmessage }}</strong><br/>
+		<h1>The Boosh says...go get a bouncy castle</h1>
+		
+		{% if categories %}
+			<ul>
+				{% for category in categories %}
+				<li><a href="/rango/category/{{ category.slug }}">{{ category.name }}</a></li>
+				{% endfor %}
+			</ul>
+		{% else %}
+			<strong>There are no categories present.</strong>
+		{% endif %}
+
 		<a href="/rango/about/">About</a>
 		<img src="{% static "images/mighty-boosh.jpg" %}" alt="Picture of the Mighty Boosh" /> 
     </body>
