@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+
 from rango.models import Category, Page
+from rango.forms import CategoryForm
+
 
 def index(request):
 	category_list = Category.objects.order_by('-likes')[:5]
@@ -32,3 +35,25 @@ def category(request, category_name_slug):
 
 	# Render response and return it to the client
 	return render(request, 'rango/category.html', context_dict)
+
+
+def add_category(request):
+	# Is it a POST?
+	if request.method == 'POST':
+		form = CategoryForm(request.POST)
+
+		# Is it valid?
+		if form.is_valid():
+			form.save(commit=True)
+
+			# Return the user to the index pages
+			return index(request)
+		else:
+			# What are the errors?
+			print form.errors
+	else:
+		form = CategoryForm()
+
+	# Bad form (or form details)...
+	# Render the form with error messages (if any)
+	return render(request, 'rango/add_category.html', {'form': form})
