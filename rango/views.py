@@ -152,9 +152,9 @@ def user_login(request):
 			# Bad login details were provided
 			print "Invalid login details: {0}, {1}".format(username, password)
 			return HttpResponse("Invalid login details supplied.")
-		else:
-			# request is not a POST
-			# Include blank dictionary object b/c no context variables
-			return render(request, 'rango/login.html', {})
+	else:
+		# request is not a POST
+		# Include blank dictionary object b/c no context variables
+		return render(request, 'rango/login.html', {})
 
 
