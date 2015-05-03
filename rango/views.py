@@ -1,5 +1,7 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseRedirect
 
 from rango.models import Category, Page
 from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
@@ -39,7 +41,7 @@ def category(request, category_name_slug):
 	# Render response and return it to the client
 	return render(request, 'rango/category.html', context_dict)
 
-
+@login_required
 def add_category(request):
 	# Is it a POST?
 	if request.method == 'POST':
@@ -61,6 +63,7 @@ def add_category(request):
 	# Render the form with error messages (if any)
 	return render(request, 'rango/add_category.html', {'form': form})
 
+@login_required
 def add_page(request, category_name_slug):
 
 	try:
@@ -156,5 +159,17 @@ def user_login(request):
 		# request is not a POST
 		# Include blank dictionary object b/c no context variables
 		return render(request, 'rango/login.html', {})
+
+@login_required
+def restricted(request):
+	return HttpResponse("Since you're logged in your can see this!")
+
+@login_required
+def user_logout(request):
+	# Log the user out
+	logout(request)
+
+	# Take user to the homepage
+	return HttpResponseRedirect('/rango/')
 
 

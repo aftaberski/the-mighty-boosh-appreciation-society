@@ -73,6 +73,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'django_project.wsgi.application'
 
+LOGIN_URL = '/rango/login/'
+
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
