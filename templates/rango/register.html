@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>The Mighty Boosh Appreciation Society</title>
+  </head>
+
+  <body>
+    <h1>Register with the Mighty Boosh Appreciation Society</h1>
+
+    {% if registered %}
+    MBAS says: <strong>Thank you for registering!</strong>
+    <a href="/rango/">Return to the homepage</a><br/>
+    {% else %}
+    MBAS says: <strong>Register here!</strong><br/>
+
+    <form id="user_form" method="post" action="/rango/register/" enctype="multipart/form-data">
+
+      {% csrf_token %}
+      <!-- Display each form! the as_p method wraps elements in p tags -->
+      {{ user_form.as_p }}
+      {{ profile_form.as_p }}
+      <input type="submit" name="submit" value="Register"/>
+    </form>
+    {% endif %}
+
+  </body>
+</html>

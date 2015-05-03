@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 from rango.models import Category, Page
-from rango.forms import CategoryForm, PageForm
+from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 
 
 def index(request):
@@ -87,3 +87,50 @@ def add_page(request, category_name_slug):
 	context_dict = {'form': form, 'category': cat, 'category_name_slug': category_name_slug}
 
 	return render(request, 'rango/add_page.html', context_dict)
+
+def register(request):
+
+	# Was the registration successful?
+	registered = False
+
+	if request.method == 'POST':
+		user_form = UserForm(data=request.POST)
+		profile_form = UserProfileForm(data=request.POST)
+
+		# If both forms are valid...
+		if user_form.is_valid() and profile_form.is_valid():
+			user = user_form.save()
+
+			# Hash PW with set_password method
+			# Then update user object
+			user.set_password(user.password)
+			user.save()
+
+			# Now for the UserProfile instance
+			# Since we want to user attribute ourselves, we commit= False
+			# Adds User model to profile
+			profile = profile_form.save(commit=False)
+			profile.user = user
+
+			# If users provides a profile picture:
+			if 'picture' in request.FILES:
+				profile.picture = request.FILES['picture']
+
+			# Now save the UserProfile instance
+			profile.save()
+
+			# Update to say registration was successful
+			registered = True
+
+		# If invalid form/forms:
+		else:
+			print user_form.errors, profile_form.errors
+
+	# Not a POST? Render form using two ModelForm instances
+	# Forms will be blank and ready for user input
+	else:
+		user_form = UserForm()
+		profile_form = UserProfileForm()
+	return render(request, 'rango/register.html', {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
+
+
