@@ -1,12 +1,12 @@
-<!DOCTYPE html>
-<html>
+{% extends 'rango/base.html' %}
+
 {% load staticfiles %}
 
-	<div>
-		<h1>About Us</h1>
+{% block body_block %}
+<div>
+	<h1>About Us</h1>
 
-		<p>It's all about the boosh</p>
-		<img src="{% static "images/mighty-boosh-about.jpg" %}" alt="Vince and Howard from the Mighty Boosh" /> 
-	</div>
-</html>
-
+	<p>It's all about the boosh</p>
+	<img src="{% static "images/mighty-boosh-about.jpg" %}" alt="Vince and Howard from the Mighty Boosh" /> 
+</div>
+{% endblock %}
